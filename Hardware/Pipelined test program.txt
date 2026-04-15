@@ -1,0 +1,22 @@
+// 1. Initialize Registers
+MOV R1, 10
+MOV R2, 20
+
+// 2. Data Hazard Test (RAW)
+ADD R3, R1, R2    // R3 = 30. (Assembler will insert 2 NOPs after this!)
+SUB R4, R3, R1    // R4 = 30 - 10 = 20.
+
+// 3. Memory Test
+ST R4, [0], R0    // Store R4 (20) into Memory Address 0
+LD R5, [0], R0    // Load Memory Address 0 into R5 (Assembler will insert NOPs!)
+
+// 4. Branching & Control Hazard Test
+CMP R5, 20        // Compare R5 (20) with Immediate 20. Sets Equal flag.
+BEQ LOOP          // Should jump to LOOP! (Assembler will insert 2 NOPs here)
+
+// 5. The "Trap" - If BEQ fails, it will execute this. We DON'T want this to execute.
+MOV R7, 99
+
+LOOP:
+ADD R6, R5, R1    // R6 = 20 + 10 = 30. 
+HLT               // Halt the processor
